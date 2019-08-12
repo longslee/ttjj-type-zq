@@ -24,6 +24,8 @@ public class Test123 {
 
         jsCode = jsCode.substring(22,jsCode.length()-2);
 
+        System.out.println("Git Test");
+
         System.out.println(jsCode);
 
         Document doc = Jsoup.parseBodyFragment(jsCode);
