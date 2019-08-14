@@ -5,6 +5,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by longslee on 2019/8/12.
  */
@@ -24,7 +27,7 @@ public class Test123 {
 
         jsCode = jsCode.substring(22,jsCode.length()-2);
 
-        System.out.println("Git Test");
+        //System.out.println("Git Test");
 
         System.out.println(jsCode);
 
@@ -32,6 +35,35 @@ public class Test123 {
         Element body = doc.body();
 
         Elements elements = body.select("li.tlpm");
+
+        for(Element element:elements){
+            System.out.println(element);
+        }
+
+        Element[] elements_2345 = new Element[4];
+        elements_2345[0] = elements.get(2);
+        elements_2345[1] = elements.get(3);
+        elements_2345[2] = elements.get(4);
+        elements_2345[3] = elements.get(5);
+
+        for(Element element : elements_2345){
+            System.out.println(element.text());
+        }
+
+        // 排名 近1月 3月 6月 1年
+        Map<Integer,String> mapRank = new HashMap<Integer, String>();
+        mapRank.put(1,elements.get(2).text());
+        mapRank.put(3,elements.get(3).text());
+        mapRank.put(6,elements.get(4).text());
+        mapRank.put(12,elements.get(5).text());
+
+        System.out.println(mapRank);
+
+
+        //四个维度 1.资金规模10亿以上会更好，
+        // 2.基金经理 更换是否频繁 经理删除领域是否是债券，从业时间长，最大盈利越多越好
+        //最大回撤越小越好，年化回报越高越好。
+        // 3. 基金费率 其实差不多
 
 //        String func = "var parser = function(){"+new String(ggDoc)+" return JSON.stringfy()}";
 //        ScriptEngine engine = new ScriptEngineManager().getEngineByName("js");
