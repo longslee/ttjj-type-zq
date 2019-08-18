@@ -59,6 +59,9 @@ public class Test123 {
 
         System.out.println(mapRank);
 
+        //资金规模在这里
+        //document.getElementsByClassName('infoOfFund')
+
 
         //四个维度 1.资金规模10亿以上会更好，
         // 2.基金经理 更换是否频繁 经理删除领域是否是债券，从业时间长，最大盈利越多越好
@@ -71,5 +74,7 @@ public class Test123 {
 //        Invocable inv = (Invocable)engine;
 //        String result = (String)inv.invokeFunction("parser");
 //        String json = gson.toJson(result);
+
+
     }
 }
