@@ -9,8 +9,12 @@ public class TestJs {
         String url = "http://fund.eastmoney.com/pingzhongdata/003255.js?v=20190810221130";
         byte[] ggDoc = Jsoup.connect(url).ignoreContentType(true).execute().bodyAsBytes();
         String jsCode = new String(ggDoc);
-        //System.out.println(JsoupUtil.getJsMap(jsCode));
 
-        Document doc = Jsoup.parse(jsCode);
+//        String text = "var xxas={sa}; /*" +
+//                "xxxss" +
+//                "*/";
+        System.out.println(JsoupUtil.getJsMap(jsCode));
+
+        //Document doc = Jsoup.parse(jsCode);
     }
 }

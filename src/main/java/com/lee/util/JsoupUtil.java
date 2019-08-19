@@ -2,11 +2,16 @@ package com.lee.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by longslee on 2019/8/12.
  */
 public class JsoupUtil {
+
+    public static final String REGEX = "\\/\\/[^\\n]*|\\/\\*(\\s|.)*?\\*\\/";
+
     public static Map<String, Object> getJsMap(String jsText) {
         /*用來封裝要保存的参数*/
         Map<String, Object> map = new HashMap<String, Object>();
@@ -20,11 +25,25 @@ public class JsoupUtil {
                 /*取得JS变量存入map*/
                 if (!map.containsKey(kvp[0].trim())) {
                     //首先去掉注释
-                    map.put(kvp[0].trim(), kvp[1].trim().substring(0, kvp[1].trim().length() - 1).toString());
+                    String value = getValue(kvp[1].trim());
+                    //map.put(kvp[0].trim(), kvp[1].trim().substring(0, kvp[1].trim().length() - 1).toString());
+                    map.put(kvp[0].trim(),value);
                 }
             }
         }
         return map;
+    }
+
+
+    private static String getValue(String source) {
+        Pattern p = Pattern.compile(REGEX);
+        Matcher m = p.matcher(source); // 获取 matcher 对象
+        int start = 0;
+        if (m.find()) {
+            start = m.start();
+            return source.substring(0,start-1);  //为什么要-1，因为末尾有一个分号
+        }
+        return source;
     }
 
 }
