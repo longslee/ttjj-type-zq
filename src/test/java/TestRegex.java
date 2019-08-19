@@ -29,13 +29,27 @@ public class TestRegex {
         System.out.println(newJs);
         System.out.println(js.substring(0,start));
 
-        String goodWord = js.substring(0,start);
-        System.out.println(goodWord);
-        String rg = ";*$";
+//        String goodWord = js.substring(0,start);
+//        System.out.println(goodWord);
+        String goodWord = "svar asa=xsasdsd;    /*xxasa*/";
+        String rg = ";.*$";
         p = Pattern.compile(rg);
         m = p.matcher(goodWord);
         if(m.find()){
             System.out.println(m.start());
+            start = m.start();
+            end = m.end();
+        }
+
+        System.out.println(goodWord.substring(0,start));
+
+        String anotherWord = "svar asa=xsasdsd;    //commtens";
+        rg = "/\\/.*$";
+        m = p.matcher(anotherWord);
+        if(m.find()){
+            System.out.println(m.start());
+            start = m.start();
+            end = m.end();
         }
     }
 

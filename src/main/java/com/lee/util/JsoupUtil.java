@@ -19,6 +19,7 @@ public class JsoupUtil {
                 String[] kvp = variable.split("=");
                 /*取得JS变量存入map*/
                 if (!map.containsKey(kvp[0].trim())) {
+                    //首先去掉注释
                     map.put(kvp[0].trim(), kvp[1].trim().substring(0, kvp[1].trim().length() - 1).toString());
                 }
             }
