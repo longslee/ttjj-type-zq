@@ -1,5 +1,3 @@
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,7 +16,7 @@ public class Test123 {
 //        System.out.println(new String(doc));
 
         //Gson gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-        Gson gson = new Gson();
+//        Gson gson = new Gson();
 
         String ggUrl = "http://fundf10.eastmoney.com/FundArchivesDatas.aspx?type=jdzf&code=003255&rt=0.7715455665382132";
         byte[] ggDoc = Jsoup.connect(ggUrl).execute().bodyAsBytes();

@@ -1,5 +1,8 @@
 package com.lee.util;
 
+import org.jsoup.Jsoup;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -10,8 +13,25 @@ import java.util.regex.Pattern;
  */
 public class JsoupUtil {
 
-    public static final String REGEX = "\\/\\/[^\\n]*|\\/\\*(\\s|.)*?\\*\\/";
+    public static final String REGEX = "\\/\\/[^\\n]*|\\/\\*(\\s|.)*?\\*\\/";  // 正则,寻找JS注释的
 
+    /**
+     * 根据url 返回body的字符串形式
+     * @param url
+     * @return
+     * @throws IOException
+     */
+    public static String getBodyAsString(String url) throws IOException {
+        byte[] bodyBytes = Jsoup.connect(url).ignoreContentType(true).execute().bodyAsBytes();
+        String bodyStr = new String(bodyBytes);
+        return bodyStr;
+    }
+
+    /**
+     *  提取k-v Map
+     * @param jsText String形式的Js
+     * @return
+     */
     public static Map<String, Object> getJsMap(String jsText) {
         /*用來封裝要保存的参数*/
         Map<String, Object> map = new HashMap<String, Object>();
@@ -35,6 +55,11 @@ public class JsoupUtil {
     }
 
 
+    /**
+     * 用于去掉带注释的v
+     * @param source var后的值 截取前
+     * @return
+     */
     private static String getValue(String source) {
         Pattern p = Pattern.compile(REGEX);
         Matcher m = p.matcher(source); // 获取 matcher 对象
@@ -42,8 +67,9 @@ public class JsoupUtil {
         if (m.find()) {
             start = m.start();
             return source.substring(0,start-1);  //为什么要-1，因为末尾有一个分号
+        }else{
+            return source.substring(0,source.length()-1);  // 去掉分号啦
         }
-        return source;
     }
 
 }

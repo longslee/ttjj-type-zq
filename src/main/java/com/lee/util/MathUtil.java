@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class MathUtil {
-    private static final Map<String,Double> PERFECT = new HashMap<String,Double>();
+    private static final Map<String,Double> PERFECT = new HashMap<String,Double>(); //基准向量
     static {
         PERFECT.put("scale",10.0); //资金规模
         PERFECT.put("managerCount",1.0); //经理更换数量
@@ -59,5 +59,13 @@ public class MathUtil {
      */
     public static double similarWithPerfect(Map<String,Double> target){
         return cosSimilarity(PERFECT,target);
+    }
+
+    /**
+     * 获取double 随机数
+     * @return 随机数 like 0.6830977451653442
+     */
+    public static double getRandom(){
+        return Math.random();
     }
 }
