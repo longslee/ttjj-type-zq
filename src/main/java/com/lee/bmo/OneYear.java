@@ -3,6 +3,7 @@ package com.lee.bmo;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.lee.thread.NameableThreadFactory;
+import com.lee.thread.OneYearWorker;
 import com.lee.util.CalendarUtil;
 import com.lee.util.JsoupUtil;
 import com.lee.util.MathUtil;
@@ -10,8 +11,10 @@ import com.lee.util.StringParser;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /** 一年排行的情况
  * Created by longslee on 2019/8/12.
@@ -25,13 +28,26 @@ public class OneYear {
 //for(String metric : CommonContext.metrics){
 //        threadPool.execute(new AllMetrics(metric,regIp));
 //    }
-    public List<Map> finalList(){
-        List top10 = getOneYearTopList();
 
-        return null;
+    private List<Future<Map>> futureList = new LinkedList<Future<Map>>();
+
+    public List<Map> finalList() throws ExecutionException, InterruptedException {
+        List<Map> lastList = new LinkedList<Map>();
+        List<Map<String,String>> top10 = getOneYearTopList();
+        System.out.println(top10);
+        for(Map<String,String> top : top10){
+            Future<Map> future = threadPool.submit(new OneYearWorker(top));
+            futureList.add(future);
+        }
+
+        for(Future<Map> future:futureList){
+            Map map = future.get();
+            lastList.add(map);
+        }
+        return lastList;
     }
 
-    private List getOneYearTopList(){
+    private List<Map<String,String>> getOneYearTopList(){
         List<Map<String,String>> topList = new LinkedList<Map<String,String>>();  // 就取10个
         JSONObject rankData = null;
         String today = CalendarUtil.getNowYYYYMMDD();
