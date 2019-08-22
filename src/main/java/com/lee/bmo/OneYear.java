@@ -24,18 +24,18 @@ public class OneYear {
     private final String oneYearUrl = "http://fund.eastmoney.com/data/rankhandler.aspx?op=ph&dt=kf&ft=zq&rs=&gs=0&sc=1nzf&st=desc&sd=${}&ed=${}&qdii=041|&tabSubtype=041,,,,,&pi=1&pn=50&dx=1&v=${}";
     private static final ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2,new NameableThreadFactory("OneYearPool",true));
 
-    private List<Future<Map>> futureList = new LinkedList<Future<Map>>();
+    private List<Future<Map<String,List<Double>>>> futureList = new LinkedList<Future<Map<String,List<Double>>>>();
 
     public List<Map> finalList() throws ExecutionException, InterruptedException {
         List<Map> lastList = new LinkedList<Map>();
         List<Map<String,String>> top10 = getOneYearTopList();
         //System.out.println(top10);
         for(Map<String,String> top : top10){
-            Future<Map> future = threadPool.submit(new OneYearWorker(top));
+            Future<Map<String,List<Double>>> future = threadPool.submit(new OneYearWorker(top));
             futureList.add(future);
         }
 
-        for(Future<Map> future:futureList){
+        for(Future<Map<String,List<Double>>> future:futureList){
             Map map = future.get();
             lastList.add(map);
         }
