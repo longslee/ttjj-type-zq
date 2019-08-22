@@ -22,19 +22,14 @@ import java.util.concurrent.Future;
 public class OneYear {
 
     private final String oneYearUrl = "http://fund.eastmoney.com/data/rankhandler.aspx?op=ph&dt=kf&ft=zq&rs=&gs=0&sc=1nzf&st=desc&sd=${}&ed=${}&qdii=041|&tabSubtype=041,,,,,&pi=1&pn=50&dx=1&v=${}";
-    private final String fundInfo = "http://fund.eastmoney.com/pingzhongdata/${}.js?v=${}"; //个股信息的js
-    private final String fundRankInfo = "http://fundf10.eastmoney.com/FundArchivesDatas.aspx?type=jdzf&code=${}&rt=${}"; // 个股同类排行的html
     private static final ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2,new NameableThreadFactory("OneYearPool",true));
-//for(String metric : CommonContext.metrics){
-//        threadPool.execute(new AllMetrics(metric,regIp));
-//    }
 
     private List<Future<Map>> futureList = new LinkedList<Future<Map>>();
 
     public List<Map> finalList() throws ExecutionException, InterruptedException {
         List<Map> lastList = new LinkedList<Map>();
         List<Map<String,String>> top10 = getOneYearTopList();
-        System.out.println(top10);
+        //System.out.println(top10);
         for(Map<String,String> top : top10){
             Future<Map> future = threadPool.submit(new OneYearWorker(top));
             futureList.add(future);
@@ -44,6 +39,7 @@ public class OneYear {
             Map map = future.get();
             lastList.add(map);
         }
+        System.out.println(lastList);
         return lastList;
     }
 
