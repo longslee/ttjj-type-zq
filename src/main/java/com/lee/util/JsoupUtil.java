@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  */
 public class JsoupUtil {
 
-    public static final String REGEX = "\\/\\/[^\\n]*|\\/\\*(\\s|.)*?\\*\\/";  // 正则,寻找JS注释的
+    public static final String REGEX = "\\s\\/\\/[^\\n]*|\\/\\*(\\s|.)*?\\*\\/";  // 正则,寻找JS注释的
 
     /**
      * 根据url 返回body的字符串形式

@@ -1,5 +1,7 @@
 package com.lee.thread;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.lee.util.JsoupUtil;
 import com.lee.util.MathUtil;
 import com.lee.util.StringParser;
@@ -9,6 +11,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.Callable;
 
@@ -36,7 +39,7 @@ public class OneYearWorker implements Callable<Map<String,List<Double>>> {
         }
 
         Map<String,List<Double>> rankMap = getSingleRank(foundKey);
-        Map<String,List<Double>> singleInfo = getSingleInfo(foundKey);
+        Map<String,Map<String,Double>> singleInfo = getSingleInfo(foundKey);
 
         return map;
     }
@@ -46,13 +49,22 @@ public class OneYearWorker implements Callable<Map<String,List<Double>>> {
      * @param key 个股代码
      * @return
      */
-    private Map<String,List<Double>> getSingleInfo(String key){
-        Map<String,List<Double>> singleInfo = new HashMap<>();
+    private Map<String,Map<String,Double>> getSingleInfo(String key){
+        Map<String,Map<String,Double>> singleInfo = new HashMap<>();
         String finalUrl = StringParser.parseDollar(fundInfo,key,randomNum);
         try {
             String jsStr = JsoupUtil.getBodyAsString(finalUrl);  //是js
             Map jsMap = JsoupUtil.getJsMap(jsStr);
-            System.out.println(jsMap);
+            String currentFundManager = (String)jsMap.get("Data_currentFundManager");
+            JSONArray managers = JSONArray.parseArray(currentFundManager);
+            double managerCount = managers.size();
+            JSONObject nowManager = managers.getJSONObject(0);
+            JSONObject power = nowManager.getJSONObject("power");
+            JSONArray datas = power.getJSONArray("data");
+            double experience = ((BigDecimal)datas.get(0)).doubleValue();
+            System.out.println(experience);
+
+            //受益 1  回撤 2  资金规模没有惹
         } catch (IOException e) {
             e.printStackTrace();
         }
