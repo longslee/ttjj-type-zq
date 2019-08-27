@@ -19,7 +19,7 @@ import java.util.concurrent.Callable;
  * 要做什么事呢
  * 就是根据传过来的基金代码 去查询个股的基本信息和个股的排名信息，最后组合成一个基金的必要信息，包含向量的信息但不限于向量
  */
-public class OneYearWorker implements Callable<Map<String,List<Double>>> {
+public class OneYearWorker implements Callable<Map<String,Map<String,Double>>> {
     private final String fundInfo = "http://fund.eastmoney.com/pingzhongdata/${}.js?v=${}"; //个股信息的js
     private final String fundRankInfo = "http://fundf10.eastmoney.com/FundArchivesDatas.aspx?type=jdzf&code=${}&rt=${}"; // 个股同类排行的html
     private Map<String,String> idName;
@@ -30,8 +30,8 @@ public class OneYearWorker implements Callable<Map<String,List<Double>>> {
         randomNum = MathUtil.getRandom();
     }
 
-    public Map<String,List<Double>> call() throws Exception {
-        Map map = new HashMap();
+    public Map<String,Map<String,Double>> call() throws Exception {
+        Map<String,Map<String,Double>> map = new HashMap();
         String foundKey = ""; //个股的key
         for (String key : idName.keySet()) {
             foundKey = key;
@@ -40,20 +40,37 @@ public class OneYearWorker implements Callable<Map<String,List<Double>>> {
 
         //Map<String,List<Double>> rankMap = getSingleRank(foundKey);
         List<Double> ranks = getSingleRankList(foundKey); //长度为4
-
-        Map<String,Map<String,Double>> singleInfo = getSingleInfo(foundKey);
-
+        double ttt = is222(ranks);
+        Map<String,Double> singleInfo = getSingleInfo(foundKey);
+        singleInfo.put("two",ttt); // 222 原则
         return map;
     }
 
+    /**
+     * 是否符合222原则
+     * @param ranks 1 3 6 12 mon.
+     * @return 1.0 是, 0.0 否
+     */
+    private double is222(List<Double> ranks){
+        double result = 0.0;
+        double m1 = ranks.get(0);
+        double m3 = ranks.get(1);
+        double m6 = ranks.get(2);
+        double m12 = ranks.get(3);
+
+        if(m3 > 0.5 || m6 > 0.5 || m12 > 0.5){
+            result = 1.0;
+        }
+        return result;
+    }
 
      /**
      * 获取个股必要信息
      * @param key 个股代码
      * @return
      */
-    private Map<String,Map<String,Double>> getSingleInfo(String key){
-        Map<String,Map<String,Double>> singleInfo = new HashMap<>();
+    private Map<String,Double> getSingleInfo(String key){
+        Map<String,Double> starMap = new HashMap<>();
         String finalUrl = StringParser.parseDollar(fundInfo,key,randomNum);
         try {
             String jsStr = JsoupUtil.getBodyAsString(finalUrl);  //是js
@@ -75,16 +92,14 @@ public class OneYearWorker implements Callable<Map<String,List<Double>>> {
                 retreat = ((BigDecimal)datas.get(2)).doubleValue();
             }
 
-            Map<String,Double> starMap = new HashMap<>();
             starMap.put("exp",experience);
             starMap.put("earn",earnings);
             starMap.put("retrt",retreat);
-            singleInfo.put(key,starMap);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return singleInfo;
+        return starMap;
     }
 
     /**
