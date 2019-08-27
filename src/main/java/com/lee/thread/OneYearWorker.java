@@ -61,10 +61,21 @@ public class OneYearWorker implements Callable<Map<String,List<Double>>> {
             JSONObject nowManager = managers.getJSONObject(0);
             JSONObject power = nowManager.getJSONObject("power");
             JSONArray datas = power.getJSONArray("data");
-            double experience = ((BigDecimal)datas.get(0)).doubleValue();
-            System.out.println(experience);
+            double experience = 0.0,earnings = 0.0,retreat = 0.0; // 经验 收益  回撤 都是评分越高越好
+            if(datas.get(0) != null){
+                experience = ((BigDecimal)datas.get(0)).doubleValue();
+            }
+            if(datas.get(1) != null){
+                earnings = ((BigDecimal)datas.get(1)).doubleValue();
+            }
+            if(datas.get(2) != null){
+                retreat = ((BigDecimal)datas.get(2)).doubleValue();
+            }
 
-            //受益 1  回撤 2  资金规模没有惹
+            System.out.println(experience);
+            System.out.println(earnings);
+            System.out.println(retreat);
+            //收益 1  回撤 2  资金规模没有惹
         } catch (IOException e) {
             e.printStackTrace();
         }
