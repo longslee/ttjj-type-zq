@@ -10,11 +10,12 @@ public class MathUtil {
     static {
         PERFECT.put("scale",10.0); //资金规模
         PERFECT.put("managerCount",1.0); //经理更换数量
-        PERFECT.put("managerMajor",1.0); //是否为债券  1是  0不是
+        //PERFECT.put("managerMajor",1.0); //是否为债券  1是  0不是
         //perfect.put("managerDuration",10.1); //从业时间  单位年
         //perfect.put("managerMaxEarning",);  //单位 w
         PERFECT.put("managerDurationExp",100.0); // 经验值 图
         PERFECT.put("managerEarnRation",100.0); //收益率，也是从图
+        PERFECT.put("managerRetreat",100.0); //经理的最大回撤评分
     }
 
     /**

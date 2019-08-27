@@ -22,6 +22,7 @@ import java.util.concurrent.Callable;
 public class OneYearWorker implements Callable<Map<String,Map<String,Double>>> {
     private final String fundInfo = "http://fund.eastmoney.com/pingzhongdata/${}.js?v=${}"; //个股信息的js
     private final String fundRankInfo = "http://fundf10.eastmoney.com/FundArchivesDatas.aspx?type=jdzf&code=${}&rt=${}"; // 个股同类排行的html
+    private final String fundZjgmPage = "http://fundf10.eastmoney.com/gmbd_${}.html";  //资金规模专页
     private Map<String,String> idName;
     private double randomNum;
 
@@ -43,7 +44,13 @@ public class OneYearWorker implements Callable<Map<String,Map<String,Double>>> {
         double ttt = is222(ranks);
         Map<String,Double> singleInfo = getSingleInfo(foundKey);
         singleInfo.put("two",ttt); // 222 原则
+        map.put(foundKey,singleInfo);
         return map;
+    }
+
+
+    private void zjgm(){ // 资金规模  div.id=gmbdtable>table.class=w782 comm gmbd> 第一个 tr > 第 5个 td
+
     }
 
     /**
@@ -92,9 +99,10 @@ public class OneYearWorker implements Callable<Map<String,Map<String,Double>>> {
                 retreat = ((BigDecimal)datas.get(2)).doubleValue();
             }
 
-            starMap.put("exp",experience);
-            starMap.put("earn",earnings);
-            starMap.put("retrt",retreat);
+            starMap.put("managerCount",managerCount);
+            starMap.put("managerDurationExp",experience);
+            starMap.put("managerEarnRation",earnings);
+            starMap.put("managerRetreat",retreat);
 
         } catch (IOException e) {
             e.printStackTrace();

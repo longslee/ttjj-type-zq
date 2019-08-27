@@ -2,6 +2,8 @@ package com.lee;
 
 import com.lee.bmo.OneYear;
 
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -11,6 +13,7 @@ import java.util.concurrent.ExecutionException;
 public class App {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         OneYear oneYear = new OneYear();
-        oneYear.finalList();
+        List<Map> lastFinalList  = oneYear.finalList();
+        List<Map> sortedList = oneYear.cosSimDesc(lastFinalList);
     }
 }

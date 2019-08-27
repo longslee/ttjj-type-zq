@@ -24,23 +24,35 @@ public class OneYear {
     private final String oneYearUrl = "http://fund.eastmoney.com/data/rankhandler.aspx?op=ph&dt=kf&ft=zq&rs=&gs=0&sc=1nzf&st=desc&sd=${}&ed=${}&qdii=041|&tabSubtype=041,,,,,&pi=1&pn=50&dx=1&v=${}";
     private static final ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2,new NameableThreadFactory("OneYearPool",true));
 
-    private List<Future<Map<String,List<Double>>>> futureList = new LinkedList<Future<Map<String,List<Double>>>>();
+    private List<Future<Map<String,Map<String,Double>>>> futureList = new LinkedList<Future<Map<String,Map<String,Double>>>>();
 
     public List<Map> finalList() throws ExecutionException, InterruptedException {
         List<Map> lastList = new LinkedList<Map>();
         List<Map<String,String>> top10 = getOneYearTopList();
         //System.out.println(top10);
         for(Map<String,String> top : top10){
-            Future<Map<String,List<Double>>> future = threadPool.submit(new OneYearWorker(top));
+            Future<Map<String,Map<String,Double>>> future = threadPool.submit(new OneYearWorker(top));
             futureList.add(future);
         }
 
-        for(Future<Map<String,List<Double>>> future:futureList){
-            Map map = future.get();
+        for(Future<Map<String,Map<String,Double>>> future:futureList){
+            Map<String,Map<String,Double>> map = future.get();
             lastList.add(map);
         }
-        System.out.println(lastList);
-        return lastList;
+        //System.out.println(lastList); // 去掉不符合222以前
+        // 去掉不符合222
+        List<Map> lastFinalList = new LinkedList<Map>();
+        for(Map<String,Map<String,Double>> single : lastList){
+            for (String key : single.keySet()) {
+                Map<String,Double> innerMap = single.get(key);
+                if(innerMap.get("two") == 0.0){
+                    lastFinalList.add(single);
+                }
+                break;
+            }
+        }
+        //System.out.println(lastFinalList);
+        return lastFinalList;
     }
 
     private List<Map<String,String>> getOneYearTopList(){
@@ -67,5 +79,15 @@ public class OneYear {
             return null;
         }
         return topList;
+    }
+
+    /**
+     * 运用余弦相似后排序，得分最高的排前面
+     * @param lastFinalList
+     * @return
+     */
+    public List<Map> cosSimDesc(List<Map> lastFinalList){
+
+        return null;
     }
 }
