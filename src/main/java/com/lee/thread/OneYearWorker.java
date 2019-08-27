@@ -38,11 +38,14 @@ public class OneYearWorker implements Callable<Map<String,List<Double>>> {
             break;
         }
 
-        Map<String,List<Double>> rankMap = getSingleRank(foundKey);
+        //Map<String,List<Double>> rankMap = getSingleRank(foundKey);
+        List<Double> ranks = getSingleRankList(foundKey); //长度为4
+
         Map<String,Map<String,Double>> singleInfo = getSingleInfo(foundKey);
 
         return map;
     }
+
 
      /**
      * 获取个股必要信息
@@ -82,6 +85,43 @@ public class OneYearWorker implements Callable<Map<String,List<Double>>> {
             e.printStackTrace();
         }
         return singleInfo;
+    }
+
+    /**
+     * 获取个股的同类排行 值是算好的比率, 比如 50|100  = 0.5
+     * @param key 个股代码
+     * @return 4位 1 3 6 12
+     */
+    private List<Double> getSingleRankList(String key){
+        List<Double> vs = new ArrayList<>();
+        String finalUrl = StringParser.parseDollar(fundRankInfo,key,randomNum);
+        try {
+            String htmlStr = JsoupUtil.getBodyAsString(finalUrl);
+            Document doc = Jsoup.parseBodyFragment(htmlStr);
+            Element body = doc.body();
+            Elements elements = body.select("li.tlpm");
+            String m_1 = elements.get(2).text();
+            String m_3 = elements.get(3).text();
+            String m_6 = elements.get(4).text();
+            String m_12 = elements.get(5).text();
+            String m1[] = m_1.split("\\|");
+            String m3[] = m_3.split("\\|");
+            String m6[] = m_6.split("\\|");
+            String m12[] = m_12.split("\\|");
+            double v1 = Double.valueOf(m1[0])/Double.valueOf(m1[1]);
+            double v3 = Double.valueOf(m3[0])/Double.valueOf(m3[1]);
+            double v6 = Double.valueOf(m6[0])/Double.valueOf(m6[1]);
+            double v12 = Double.valueOf(m12[0])/Double.valueOf(m12[1]);
+            vs.add(v1);
+            vs.add(v3);
+            vs.add(v6);
+            vs.add(v12);
+        }catch(IOException e){
+            System.out.println("取同类排名出错");
+            e.printStackTrace();
+            return vs;
+        }
+        return vs;
     }
 
     /**
