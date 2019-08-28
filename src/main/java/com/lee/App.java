@@ -13,7 +13,7 @@ import java.util.concurrent.ExecutionException;
 public class App {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         OneYear oneYear = new OneYear();
-        List<Map> lastFinalList  = oneYear.finalList();
-        List<Map> sortedList = oneYear.cosSimDesc(lastFinalList);
+        List<Map<String,Map<String,Double>>> lastFinalList  = oneYear.finalList();
+        List<Map<String,Double>> sortedList = oneYear.cosSimDesc(lastFinalList);
     }
 }

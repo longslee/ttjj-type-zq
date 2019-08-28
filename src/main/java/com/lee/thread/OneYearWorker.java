@@ -23,6 +23,7 @@ public class OneYearWorker implements Callable<Map<String,Map<String,Double>>> {
     private final String fundInfo = "http://fund.eastmoney.com/pingzhongdata/${}.js?v=${}"; //个股信息的js
     private final String fundRankInfo = "http://fundf10.eastmoney.com/FundArchivesDatas.aspx?type=jdzf&code=${}&rt=${}"; // 个股同类排行的html
     private final String fundZjgmPage = "http://fundf10.eastmoney.com/gmbd_${}.html";  //资金规模专页
+    private final String fundZjgmJs = "http://fundf10.eastmoney.com/FundArchivesDatas.aspx?type=jzcgm&code=${}&rt=${}";  // 资金规模js
     private Map<String,String> idName;
     private double randomNum;
 
@@ -44,13 +45,31 @@ public class OneYearWorker implements Callable<Map<String,Map<String,Double>>> {
         double ttt = is222(ranks);
         Map<String,Double> singleInfo = getSingleInfo(foundKey);
         singleInfo.put("two",ttt); // 222 原则
+        double zjgm  = getZjgm(foundKey);
+        singleInfo.put("scale",zjgm);
         map.put(foundKey,singleInfo);
+
         return map;
     }
 
 
-    private void zjgm(){ // 资金规模  div.id=gmbdtable>table.class=w782 comm gmbd> 第一个 tr > 第 5个 td
-
+    private double getZjgm(String key){ // 资金规模  div.id=gmbdtable>table.class=w782 comm gmbd> 第一个 tr > 第 5个 td  不行，此时还为加载
+        String finalUrl = StringParser.parseDollar(fundZjgmJs,key,randomNum);
+        double zjgm = 0.0;
+        try {
+            String jsStr = JsoupUtil.getBodyAsString(finalUrl);  //是js
+            Map jsMap = JsoupUtil.getJsMap(jsStr);
+            String[] values = ((String)jsMap.get("jzcgm_apidata")).split(","); // 取最后一个值，去掉末尾的] 就是目前的规模
+            String zjgmStr = (values[values.length-1]);
+            zjgmStr = zjgmStr.substring(0,zjgmStr.length()-1);
+            if(zjgmStr != null){
+                zjgm = Double.valueOf(zjgmStr);
+            }
+        } catch (IOException e) {
+            System.out.println("获取资金规模出错");
+            e.printStackTrace();
+        }
+        return zjgm;
     }
 
     /**
@@ -105,6 +124,7 @@ public class OneYearWorker implements Callable<Map<String,Map<String,Double>>> {
             starMap.put("managerRetreat",retreat);
 
         } catch (IOException e) {
+            System.out.println("获取经理图出错");
             e.printStackTrace();
         }
         return starMap;

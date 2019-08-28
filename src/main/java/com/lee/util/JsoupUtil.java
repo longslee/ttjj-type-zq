@@ -1,6 +1,7 @@
 package com.lee.util;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -25,6 +26,17 @@ public class JsoupUtil {
         byte[] bodyBytes = Jsoup.connect(url).ignoreContentType(true).execute().bodyAsBytes();
         String bodyStr = new String(bodyBytes);
         return bodyStr;
+    }
+
+    /**
+     * 从指定url获取doc
+     * @param url emmm
+     * @return doc
+     * @throws IOException
+     */
+    public static Document getDocFromUrl(String url) throws IOException {
+        Document doc = Jsoup.connect(url).get();
+        return doc;
     }
 
     /**

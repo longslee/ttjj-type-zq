@@ -26,7 +26,7 @@ public class OneYear {
 
     private List<Future<Map<String,Map<String,Double>>>> futureList = new LinkedList<Future<Map<String,Map<String,Double>>>>();
 
-    public List<Map> finalList() throws ExecutionException, InterruptedException {
+    public List<Map<String,Map<String,Double>>> finalList() throws ExecutionException, InterruptedException {
         List<Map> lastList = new LinkedList<Map>();
         List<Map<String,String>> top10 = getOneYearTopList();
         //System.out.println(top10);
@@ -41,7 +41,7 @@ public class OneYear {
         }
         //System.out.println(lastList); // 去掉不符合222以前
         // 去掉不符合222
-        List<Map> lastFinalList = new LinkedList<Map>();
+        List<Map<String,Map<String,Double>>> lastFinalList = new LinkedList<Map<String,Map<String,Double>>>();
         for(Map<String,Map<String,Double>> single : lastList){
             for (String key : single.keySet()) {
                 Map<String,Double> innerMap = single.get(key);
@@ -51,7 +51,7 @@ public class OneYear {
                 break;
             }
         }
-        //System.out.println(lastFinalList);
+        System.out.println(lastFinalList);
         return lastFinalList;
     }
 
@@ -86,8 +86,16 @@ public class OneYear {
      * @param lastFinalList
      * @return
      */
-    public List<Map> cosSimDesc(List<Map> lastFinalList){
-
+    public List<Map<String,Double>> cosSimDesc(List<Map<String,Map<String,Double>>> lastFinalList){
+        List<Map<String,Double>> sortedList = new ArrayList<>();
+        Map<String,Double> sortMap = new HashMap<>();
+        for(Map<String,Map<String,Double>> single : lastFinalList){
+            for (String key : single.keySet()) {
+                Map<String,Double> singleVector = single.get(key);
+                double score = MathUtil.similarWithPerfect(singleVector);
+                sortMap.put(key,score);
+            }
+        }
         return null;
     }
 }
