@@ -1,5 +1,6 @@
 package com.lee;
 
+import com.alibaba.fastjson.JSON;
 import com.lee.bmo.OneYear;
 
 import java.util.List;
@@ -15,5 +16,9 @@ public class App {
         OneYear oneYear = new OneYear();
         List<Map<String,Map<String,Double>>> lastFinalList  = oneYear.finalList();
         List<Map<String,Double>> sortedList = oneYear.cosSimDesc(lastFinalList);
+        Map<String,String> finalMap = oneYear.getFinalJson(sortedList);
+        //序列化
+        String jsonStr = JSON.toJSONString(finalMap);
+        System.out.println(jsonStr);
     }
 }
