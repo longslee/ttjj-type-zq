@@ -2,6 +2,7 @@ package com.lee;
 
 import com.alibaba.fastjson.JSON;
 import com.lee.bmo.OneYear;
+import com.lee.util.FileUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,8 @@ public class App {
         Map<String,String> finalMap = oneYear.getFinalJson(sortedList);
         //序列化
         String jsonStr = JSON.toJSONString(finalMap);
-        System.out.println(jsonStr);
+        String jsStr = FileUtil.jsFileContent("zjList",jsonStr);
+        System.out.println(jsStr);
+        FileUtil.writeFile("D:/","ttjj.js",jsStr);
     }
 }
