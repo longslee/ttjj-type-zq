@@ -151,10 +151,13 @@ public class OneYearWorker implements Callable<Map<String,Map<String,Double>>> {
             String m3[] = m_3.split("\\|");
             String m6[] = m_6.split("\\|");
             String m12[] = m_12.split("\\|");
-            double v1 = Double.valueOf(m1[0])/Double.valueOf(m1[1]);
-            double v3 = Double.valueOf(m3[0])/Double.valueOf(m3[1]);
-            double v6 = Double.valueOf(m6[0])/Double.valueOf(m6[1]);
-            double v12 = Double.valueOf(m12[0])/Double.valueOf(m12[1]);
+            double v1,v3,v6,v12 = 0.0;
+
+            v1 = Double.valueOf(m1[0].equals("---")? "0":m1[0])/Double.valueOf(m1[1].equals("---")? "1":m1[1]);
+            v3 = Double.valueOf(m3[0].equals("---")? "0":m3[0])/Double.valueOf(m3[1].equals("---")? "1":m3[1]);
+            v6 = Double.valueOf(m6[0].equals("---")? "0":m6[0])/Double.valueOf(m6[1].equals("---")? "1":m6[1]);
+            v12 = Double.valueOf(m12[0].equals("---")? "0":m12[0])/Double.valueOf(m12[1].equals("---")? "1":m12[1]);
+
             vs.add(v1);
             vs.add(v3);
             vs.add(v6);

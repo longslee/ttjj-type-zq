@@ -22,21 +22,21 @@ public class OneYear {
     private static final ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2,new NameableThreadFactory("OneYearPool",true));
 
     private List<Future<Map<String,Map<String,Double>>>> futureList = new LinkedList<Future<Map<String,Map<String,Double>>>>();
-    private static List<Map<String,String>> top10 = new LinkedList<Map<String,String>>();
+    private static List<Map<String,String>> top20 = new LinkedList<Map<String,String>>();
     private static Map<String,String> fundKV = new HashMap<>();
 
     public List<Map<String,Map<String,Double>>> finalList() throws ExecutionException, InterruptedException {
         List<Map> lastList = new LinkedList<Map>();
-        top10 = getOneYearTopList();
+        top20 = getOneYearTopList();
 
-        for(Map<String,String> map : top10){
+        for(Map<String,String> map : top20){
             for (String key : map.keySet()) {
                 fundKV.put(key,map.get(key));
             }
         }
 
         //System.out.println(top10);
-        for(Map<String,String> top : top10){
+        for(Map<String,String> top : top20){
             Future<Map<String,Map<String,Double>>> future = threadPool.submit(new OneYearWorker(top));
             futureList.add(future);
         }
@@ -62,7 +62,7 @@ public class OneYear {
     }
 
     private List<Map<String,String>> getOneYearTopList(){
-        List<Map<String,String>> topList = new LinkedList<Map<String,String>>();  // 就取10个
+        List<Map<String,String>> topList = new LinkedList<Map<String,String>>();  // 就取20个
         JSONObject rankData = null;
         String today = CalendarUtil.getNowYYYYMMDD();
         double vRandom = MathUtil.getRandom();
@@ -73,7 +73,7 @@ public class OneYear {
             //System.out.println(jsMap.get("rankData"));
             rankData = JSONObject.parseObject((String)jsMap.get("rankData"));
             JSONArray datas = rankData.getJSONArray("datas");
-            for (int i = 0; i < 10; i++) { //就取10个
+            for (int i = 0; i < 20; i++) { //就取10个
                 String item = (String)datas.get(i);
                 String[] strings = item.split(",");
                 Map<String,String> map = new HashMap<String,String>();
