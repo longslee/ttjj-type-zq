@@ -22,6 +22,7 @@ public class App {
         String jsonStr = JSON.toJSONString(finalMap);
         String jsStr = FileUtil.jsFileContent("zjList",jsonStr);
         System.out.println(jsStr);
-        FileUtil.writeFile("D:/","ttjj.js",jsStr);
+        //FileUtil.writeFile("D:/","ttjj.js",jsStr);
+        FileUtil.writeFile("/home/coffee/java-files/ttjj/ttjj-zq","ttjj_zq.js",jsStr);  //linux
     }
 }
