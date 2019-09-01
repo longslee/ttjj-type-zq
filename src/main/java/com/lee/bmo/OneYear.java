@@ -126,4 +126,22 @@ public class OneYear {
         //System.out.println(finalMap);
         return finalMap;
     }
+
+    /**
+     * 展示给前端的json array
+     * @param sortedList
+     * @return
+     */
+    public List<Map<String,String>> getFinalJsonArray(List<Map<String,Double>> sortedList){
+        List<Map<String,String>> finalList = new ArrayList<>();
+        for(Map<String,Double> single :sortedList){
+            Map<String,String> finalMap = new HashMap<>();
+            for (String key : single.keySet()) {
+                String name = fundKV.get(key);
+                finalMap.put(key,name);
+                finalList.add(finalMap);
+            }
+        }
+        return finalList;
+    }
 }

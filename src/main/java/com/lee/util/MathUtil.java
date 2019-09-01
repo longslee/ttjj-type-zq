@@ -9,7 +9,7 @@ public class MathUtil {
     private static final Map<String,Double> PERFECT = new HashMap<String,Double>(); //基准向量
     static {
         PERFECT.put("scale",10.0); //资金规模 这里为了要与100对齐乘以10 原来=10.0
-        PERFECT.put("managerCount",100.0); //经理更换数量 这里为了要与100对齐乘以100 原来=1.0
+        PERFECT.put("managerCount",1.0); //经理更换数量 这里为了要与100对齐乘以100 原来=1.0
         //PERFECT.put("managerMajor",1.0); //是否为债券  1是  0不是
         //perfect.put("managerDuration",10.1); //从业时间  单位年
         //perfect.put("managerMaxEarning",);  //单位 w

@@ -18,8 +18,9 @@ public class App {
         List<Map<String,Map<String,Double>>> lastFinalList  = oneYear.finalList();
         List<Map<String,Double>> sortedList = oneYear.cosSimDesc(lastFinalList);
         Map<String,String> finalMap = oneYear.getFinalJson(sortedList);
+        List<Map<String,String>> finalList = oneYear.getFinalJsonArray(sortedList);
         //序列化
-        String jsonStr = JSON.toJSONString(finalMap);
+        String jsonStr = JSON.toJSONString(finalList);
         String jsStr = FileUtil.jsFileContent("zjList",jsonStr);
         System.out.println(jsStr);
         //FileUtil.writeFile("D:/","ttjj.js",jsStr);
