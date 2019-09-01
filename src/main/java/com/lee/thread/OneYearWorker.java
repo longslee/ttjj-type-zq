@@ -103,7 +103,7 @@ public class OneYearWorker implements Callable<Map<String,Map<String,Double>>> {
             Map jsMap = JsoupUtil.getJsMap(jsStr);
             String currentFundManager = (String)jsMap.get("Data_currentFundManager");
             JSONArray managers = JSONArray.parseArray(currentFundManager);
-            double managerCount = managers.size();
+            double managerCount = managers.size() * 100;
             JSONObject nowManager = managers.getJSONObject(0);
             JSONObject power = nowManager.getJSONObject("power");
             JSONArray datas = power.getJSONArray("data");
