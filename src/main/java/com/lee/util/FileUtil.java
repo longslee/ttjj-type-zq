@@ -15,7 +15,7 @@ public class FileUtil {
 
     public static void writeFile(String path,String fileName,String content){
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(path+fileName), "utf-8"))) {
+                new FileOutputStream(path+fileName), "utf-8"))) {  // 这里utf-8 写入在linux下看到是乱码 但是网页展示却要utf-8
             writer.write(content);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
